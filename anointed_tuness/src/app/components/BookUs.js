@@ -1,15 +1,24 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Title, Paper, TextInput, Textarea, Button } from '@mantine/core';
+import { Title, Paper, TextInput, Textarea, Button, Select } from '@mantine/core';
 
 const BookUs = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [eventType, setEventType] = useState('');
+  const [selectedEventType, setSelectedEventType] = useState(null); // New state for Select
+  const [eventType, setEventType] = useState(''); // Keep for "Type of Event" text input if needed, or remove if Select replaces it entirely
   const [preferredDate, setPreferredDate] = useState('');
   const [message, setMessage] = useState('');
   const [emailError, setEmailError] = useState('');
+
+  const eventTypeOptions = [
+    { value: 'live_performance', label: 'Live Performance' },
+    { value: 'studio_recording', label: 'Studio Recording' },
+    { value: 'music_lesson', label: 'Music Lesson' },
+    { value: 'event_collaboration', label: 'Event Collaboration' },
+    { value: 'other', label: 'Other' }, // Added "Other" option
+  ];
 
   const isValidEmail = (email) => {
     // Basic email regex validation
@@ -21,19 +30,22 @@ const BookUs = () => {
 
     let valid = true;
 
-    if (!isValidEmail(email)) {
+    if (!email || !isValidEmail(email)) { // Ensure email is not empty and valid
       setEmailError('Invalid email format');
       valid = false;
     } else {
       setEmailError('');
     }
 
+    // Determine the final event type to send
+    const finalEventType = selectedEventType === 'other' ? eventType : selectedEventType;
+
     if (valid) {
       // Process form submission, e.g., send to API
       console.log({
         name,
         email,
-        eventType,
+        eventType: finalEventType, // Use the determined final event type
         preferredDate,
         message,
       });
@@ -41,7 +53,8 @@ const BookUs = () => {
       // Clear form
       setName('');
       setEmail('');
-      setEventType('');
+      setSelectedEventType(null); // Clear selected event type
+      setEventType(''); // Clear custom event type
       setPreferredDate('');
       setMessage('');
     }
@@ -70,13 +83,24 @@ const BookUs = () => {
           error={emailError}
           style={{ marginBottom: '15px' }}
         />
-        <TextInput
-          label="Type of Event"
-          placeholder="e.g., Wedding, Party"
-          value={eventType}
-          onChange={(event) => setEventType(event.currentTarget.value)}
+        <Select
+          label="Select Event Type"
+          placeholder="Pick one"
+          data={eventTypeOptions}
+          value={selectedEventType}
+          onChange={setSelectedEventType}
           style={{ marginBottom: '15px' }}
         />
+        {selectedEventType === 'other' && ( // Conditionally render
+          <TextInput
+            label="Type of Event (Please specify)"
+            placeholder="e.g., Birthday Party, Charity Gala"
+            required // Make required when "Other" is selected
+            value={eventType}
+            onChange={(event) => setEventType(event.currentTarget.value)}
+            style={{ marginBottom: '15px' }}
+          />
+        )}
         <TextInput
           type="date"
           label="Preferred Date"
@@ -85,7 +109,7 @@ const BookUs = () => {
           style={{ marginBottom: '15px' }}
         />
         <Textarea
-          label="Message"
+          label="Event Details"
           placeholder="Tell us more about your event"
           rows={5}
           value={message}
