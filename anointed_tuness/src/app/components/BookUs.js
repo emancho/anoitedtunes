@@ -1,122 +1,114 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Title, Paper, TextInput, Textarea, Button, Select } from '@mantine/core';
+import React from 'react';
+import { Title, Paper, TextInput, Textarea, Button, Select, SimpleGrid, Group } from '@mantine/core';
+import { useForm } from '@mantine/form';
 
 const BookUs = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [selectedEventType, setSelectedEventType] = useState(null); // New state for Select
-  const [eventType, setEventType] = useState(''); // Keep for "Type of Event" text input if needed, or remove if Select replaces it entirely
-  const [preferredDate, setPreferredDate] = useState('');
-  const [message, setMessage] = useState('');
-  const [emailError, setEmailError] = useState('');
-
   const eventTypeOptions = [
     { value: 'live_performance', label: 'Live Performance' },
     { value: 'studio_recording', label: 'Studio Recording' },
     { value: 'music_lesson', label: 'Music Lesson' },
     { value: 'event_collaboration', label: 'Event Collaboration' },
-    { value: 'other', label: 'Other' }, // Added "Other" option
+    { value: 'other', label: 'Other' },
   ];
 
-  const isValidEmail = (email) => {
-    // Basic email regex validation
-    return /\S+@\S+\.\S+/.test(email);
-  };
+  const form = useForm({
+    initialValues: {
+      name: '',
+      email: '',
+      selectedEventType: null,
+      customEventType: '', // For "Other" option
+      preferredDate: '',
+      message: '',
+    },
+    validate: {
+      name: (value) => (value.trim().length < 2 ? 'Name must be at least 2 characters' : null),
+      email: (value) => (!/\S+@\S+\.\S+/.test(value) ? 'Invalid email format' : null),
+      selectedEventType: (value) => (value === null ? 'Please select an event type' : null),
+      customEventType: (value, values) =>
+        values.selectedEventType === 'other' && value.trim().length === 0
+          ? 'Please specify the event type'
+          : null,
+    },
+  });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    let valid = true;
-
-    if (!email || !isValidEmail(email)) { // Ensure email is not empty and valid
-      setEmailError('Invalid email format');
-      valid = false;
-    } else {
-      setEmailError('');
-    }
-
+  const handleSubmit = (values) => {
     // Determine the final event type to send
-    const finalEventType = selectedEventType === 'other' ? eventType : selectedEventType;
+    const finalEventType = values.selectedEventType === 'other' ? values.customEventType : values.selectedEventType;
 
-    if (valid) {
-      // Process form submission, e.g., send to API
-      console.log({
-        name,
-        email,
-        eventType: finalEventType, // Use the determined final event type
-        preferredDate,
-        message,
-      });
-      alert('Inquiry sent successfully!');
-      // Clear form
-      setName('');
-      setEmail('');
-      setSelectedEventType(null); // Clear selected event type
-      setEventType(''); // Clear custom event type
-      setPreferredDate('');
-      setMessage('');
-    }
+    // Process form submission, e.g., send to API
+    console.log({
+      name: values.name,
+      email: values.email,
+      eventType: finalEventType,
+      preferredDate: values.preferredDate,
+      message: values.message,
+    });
+    alert('Inquiry sent successfully!');
+    form.reset(); // Clear form
   };
 
   return (
     <Paper shadow="xs" p="xl" id="book-us" style={{ textAlign: 'center' }}>
       <Title order={2} style={{ textAlign: 'center', marginBottom: '20px' }}>Book Us</Title>
       <p>Ready to experience the magic of Anointed Tunes at your next event? We would love to be a part of your special occasion! Please fill out the form below or contact us directly to discuss your needs and check our availability.</p>
-      <form style={{ maxWidth: '400px', margin: '0 auto', textAlign: 'left' }} onSubmit={handleSubmit}>
-        <TextInput
-          label="Name"
-          placeholder="Your Name"
-          required
-          value={name}
-          onChange={(event) => setName(event.currentTarget.value)}
-          style={{ marginBottom: '15px' }}
-        />
-        <TextInput
-          type="email"
-          label="Email"
-          placeholder="Your Email"
-          required
-          value={email}
-          onChange={(event) => setEmail(event.currentTarget.value)}
-          error={emailError}
-          style={{ marginBottom: '15px' }}
-        />
+      <form style={{ maxWidth: '400px', margin: '0 auto', textAlign: 'left' }} onSubmit={form.onSubmit(handleSubmit)}>
+        <SimpleGrid cols={{ base: 1, sm: 2 }} mt="xl">
+          <TextInput
+            label="Name"
+            placeholder="Your Name"
+            required
+            {...form.getInputProps('name')}
+          />
+          <TextInput
+            type="email"
+            label="Email"
+            placeholder="Your Email"
+            required
+            {...form.getInputProps('email')}
+          />
+        </SimpleGrid>
+
         <Select
           label="Select Event Type"
           placeholder="Pick one"
           data={eventTypeOptions}
-          value={selectedEventType}
-          onChange={setSelectedEventType}
+          required
+          {...form.getInputProps('selectedEventType')}
+          onChange={(value) => {
+            form.setFieldValue('selectedEventType', value);
+            if (value !== 'other') {
+              form.setFieldValue('customEventType', ''); // Clear custom type if "Other" is deselected
+            }
+          }}
           style={{ marginBottom: '15px' }}
         />
-        {selectedEventType === 'other' && ( // Conditionally render
+        {form.values.selectedEventType === 'other' && (
           <TextInput
             label="Type of Event (Please specify)"
             placeholder="e.g., Birthday Party, Charity Gala"
-            required // Make required when "Other" is selected
-            value={eventType}
-            onChange={(event) => setEventType(event.currentTarget.value)}
+            required
+            {...form.getInputProps('customEventType')}
             style={{ marginBottom: '15px' }}
           />
         )}
         <TextInput
           type="date"
           label="Preferred Date"
-          value={preferredDate}
-          onChange={(event) => setPreferredDate(event.currentTarget.value)}
+          {...form.getInputProps('preferredDate')}
           style={{ marginBottom: '15px' }}
         />
         <Textarea
-          label="Event Details"
+          label="Message"
           placeholder="Tell us more about your event"
           rows={5}
-          value={message}
-          onChange={(event) => setMessage(event.currentTarget.value)}
+          {...form.getInputProps('message')}
           style={{ marginBottom: '20px' }}
         />
-        <Button type="submit" fullWidth>Send Inquiry</Button>
+        <Group justify="center" mt="xl">
+          <Button type="submit" size="md">Send Inquiry</Button>
+        </Group>
       </form>
       <p style={{ marginTop: '20px' }}>We look forward to hearing from you and making your event truly special!</p>
     </Paper>
