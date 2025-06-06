@@ -5,8 +5,10 @@ import { Title, Paper, SimpleGrid, Text } from '@mantine/core';
 
 const Services = () => {
   return (
-    <Paper shadow="xs" p="xl" id="services" style={{ textAlign: 'center' }}>
-      <Title order={2} style={{ textAlign: 'center', marginBottom: '20px' }}>Our Services</Title>
+    <Paper shadow="xs" p="xl" id="services" style={{ textAlign: 'center', backgroundColor: '#C27AF9' }}>
+      <div style={{ border: '5px solid white', padding: '10px', borderRadius: '5px', display: 'inline-block', marginBottom: '20px', backgroundColor: '#d4a1fb' }}>
+        <Title order={2} size="2.5rem" fw={900} style={{ textAlign: 'center' }}>Our Services</Title>
+      </div>
       <div>
         <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="xl"> {/* Increased spacing */}
           <Paper withBorder p="md" radius="md" style={{ backgroundColor: 'white', textAlign: 'center' }}>
