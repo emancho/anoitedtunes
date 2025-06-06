@@ -1,0 +1,48 @@
+.header {
+  padding-top: var(--mantine-spacing-md);
+  padding-bottom: var(--mantine-spacing-md);
+  background-color: #C27AF9; /* Purple background for the entire header */
+  border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5));
+  text-align: center; /* Center text within the header */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inner {
+  height: rem(42px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.link {
+  display: block;
+  line-height: 1;
+  padding: rem(20px); /* Padding similar to title */
+  border: rem(4px) solid #1c7ed6; /* Border similar to title */
+  border-radius: rem(5px); /* Border radius similar to title */
+  display: inline-block;
+  margin-bottom: rem(20px);
+  text-decoration: none;
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0)); /* Default text color */
+  background-color: transparent; /* Transparent background */
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6)); /* Subtle background change on hover */
+  }
+}
+
+.title {
+  /* Remove background-color and text-align as they are now on .header */
+  font-size: var(--mantine-font-size-xxl);
+  font-weight: bold;
+}
+
+.menuContainer {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: var(--mantine-spacing-md);
+}
