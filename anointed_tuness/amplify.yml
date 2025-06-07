@@ -3,16 +3,16 @@ frontend:
   phases:
     preBuild:
       commands:
-        - cd anointed_tuness
+        - cd anointed_tuness/anointed_tuness
         - npm ci
     build:
       commands:
-        - cd anointed_tuness
+        - cd anointed_tuness/anointed_tuness
         - npm run build
   artifacts:
-    baseDirectory: anointed_tuness/out
+    baseDirectory: anointed_tuness/anointed_tuness/out
     files:
       - '**/*'
   cache:
     paths:
-      - anointed_tuness/node_modules/**/*
+      - anointed_tuness/anointed_tuness/node_modules/**/*
