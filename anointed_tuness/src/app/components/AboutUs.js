@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Title, Skeleton, Paper } from '@mantine/core';
+import Image from 'next/image';
 
 const AboutUs = () => {
   return (
@@ -9,7 +10,13 @@ const AboutUs = () => {
       <div style={{ border: '5px solid white', padding: '10px', borderRadius: '5px', display: 'inline-block', marginBottom: '20px', backgroundColor: '#d4a1fb' }}>
         <Title order={2} size="2.5rem" fw={900} style={{ textAlign: 'center' }}>About Us</Title>
       </div>
-      <img src="/AboutMeProfile.png" alt="About Us Profile" style={{ width: '400px', height: '400px', borderRadius: '80%', objectFit: 'cover', margin: '0 auto 20px auto' }} />
+      <Image
+        src="/AboutMeProfile.png"
+        alt="About Us Profile"
+        width={400}
+        height={400}
+        style={{ borderRadius: '80%', objectFit: 'cover', margin: '0 auto 20px auto' }}
+      />
       <div>
         <p>At Anointed Tunes, we are dedicated to providing a unique musical experience that uplifts, heals, and inspires.
            Founded by Walter Tita, with live intermissions from his talented children on violin and piano, we bring heartfelt, spirit-driven music to your events.</p>
