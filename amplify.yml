@@ -10,7 +10,7 @@ frontend:
         - cd anointed_tuness
         - npm run build
   artifacts:
-    baseDirectory: anointed_tuness/out # Path to the 'out' directory relative to the repository root
+    baseDirectory: anointed_tuness/.next # Path to the 'out' directory relative to the repository root
     files:
       - '**/*'
   cache:
