@@ -1,0 +1,18 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd anointed_tuness
+        - npm ci
+    build:
+      commands:
+        - cd anointed_tuness
+        - npm run build
+  artifacts:
+    baseDirectory: anointed_tuness/out # Path to the 'out' directory relative to the repository root
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - anointed_tuness/node_modules/**/*
