@@ -24,8 +24,7 @@ const Services = () => {
             <Text>Personalized lessons for various instruments and vocal training, catering to all skill levels.</Text>
           </Paper>
           <Paper withBorder p="md" radius="md" style={{ backgroundColor: 'white', textAlign: 'center' }}>
-            <Text fw={700} td="underline">Event Collaboration:</Text>
-            <Text>Partner with us to create unique musical experiences tailored to your event's theme and audience.</Text>
+            <Text>Partner with us to create unique musical experiences tailored to your events theme and audience.</Text>
           </Paper>
         </SimpleGrid>
         <p style={{ marginTop: '20px' }}>We are committed to providing high-quality musical services that meet your specific needs and exceed your expectations. Contact us today to discuss how we can bring your musical vision to life!</p>
