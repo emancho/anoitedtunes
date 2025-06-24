@@ -3,6 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
+        - ls -la
         - cd anointed_tuness
         - npm ci
     build:
