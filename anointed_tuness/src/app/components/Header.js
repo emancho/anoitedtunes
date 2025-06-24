@@ -21,7 +21,10 @@ export function Header() {
       className={classes.link}
       onClick={(event) => {
         event.preventDefault();
-        document.querySelector(link.link).scrollIntoView({ behavior: 'smooth' });
+        const element = document.querySelector(link.link);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
         close(); // Close drawer on link click
       }}
     >
