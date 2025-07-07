@@ -51,9 +51,14 @@ const BookUs = () => {
     };
 
     // Use the environment variable for your AWS API Gateway endpoint
-    const apiGatewayEndpoint = process.env.ADD_BOOKING_URL; 
+    const apiGatewayEndpoint = process.env.NEXT_PUBLIC_ADD_BOOKING_URL; 
 
     try {
+      // Check if API endpoint is configured
+      if (!apiGatewayEndpoint) {
+        throw new Error('Booking service is not configured. Please contact support.');
+      }
+
       const response = await fetch(apiGatewayEndpoint, {
         method: 'POST',
         headers: {
@@ -63,8 +68,18 @@ const BookUs = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to send inquiry');
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+        if (response.status === 404) {
+          errorMessage = 'Booking service endpoint not found. Please check API Gateway configuration.';
+        }
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch (parseError) {
+          // Response wasn't JSON, use status-specific message
+          console.warn('Response not JSON:', parseError);
+        }
+        throw new Error(errorMessage);
       }
 
       alert('Inquiry sent successfully!');
