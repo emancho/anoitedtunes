@@ -51,7 +51,7 @@ const BookUs = () => {
     };
 
     // Use the environment variable for your AWS API Gateway endpoint
-    const apiGatewayEndpoint = process.env.NEXT_PUBLIC_API_URL; 
+    const apiGatewayEndpoint = process.env.ADD_BOOKING_URL; 
 
     try {
       const response = await fetch(apiGatewayEndpoint, {
